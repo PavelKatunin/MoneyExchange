@@ -7,6 +7,7 @@ target 'MoneyExchange' do
 
   # Pods for MoneyExchange
   pod 'XMLDictionary', '~> 1.4’
+  pod 'iCarousel'
 
   target 'MoneyExchangeTests' do
     inherit! :search_paths

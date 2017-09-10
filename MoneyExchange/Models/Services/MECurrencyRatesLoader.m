@@ -1,11 +1,3 @@
-//
-//  MECurrencyRatesLoader.m
-//  MoneyExchange
-//
-//  Created by Pavel Katunin on 8/25/17.
-//  Copyright © 2017 Pavel Katunin. All rights reserved.
-//
-
 #import "MECurrencyRatesLoader.h"
 
 @interface MECurrencyRatesLoader ()
@@ -37,7 +29,8 @@
 #pragma mark - Public methods
 
 - (void)loadRatesSuccess:(void (^)(NSDictionary *rates))success
-                    fail:(void (^)(NSError *error))fail {
+                    fail:(void (^)(NSError *error))fail
+             targetQueue:(dispatch_queue_t)queue {
 
     NSURL *url = [NSURL URLWithString:self.urlString];
     
@@ -47,10 +40,14 @@
                                                               NSURLResponse *response,
                                                               NSError *error) {
                                               if (error) {
-                                                  fail(error);
+                                                  dispatch_async(queue, ^{
+                                                      fail(error);
+                                                  });
                                               }
                                               else {
-                                                  success([self.parser currencyRatesFromData:data]);
+                                                  dispatch_async(queue, ^{
+                                                      success([self.parser currencyRatesFromData:data]);
+                                                  });
                                               }
                                               
                                           }];

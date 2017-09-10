@@ -1,11 +1,3 @@
-//
-//  MEAccountOperation.m
-//  MoneyExchange
-//
-//  Created by Pavel Katunin on 8/29/17.
-//  Copyright © 2017 Pavel Katunin. All rights reserved.
-//
-
 #import "MEAccountOperation.h"
 
 @interface MEAccountOperation ()

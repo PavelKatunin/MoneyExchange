@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		34EA2E7F65D1878B9BA4EF33 /* libPods-MoneyExchange.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6C3870D95716457D286706 /* libPods-MoneyExchange.a */; };
+		766D14511F6450B800AA10E8 /* MECurrencyRatesLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 766D14501F6450B800AA10E8 /* MECurrencyRatesLoaderTests.m */; };
+		766D14551F64518700AA10E8 /* NSLayoutConstraint+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 766D14541F64518700AA10E8 /* NSLayoutConstraint+Helpers.m */; };
+		766D14581F64818B00AA10E8 /* MECurrencyDisplayItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 766D14571F64818B00AA10E8 /* MECurrencyDisplayItem.m */; };
 		B09F2E23F566CC90D1638957 /* libPods-MoneyExchangeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD357DCFAF6CCB57C0E4B208 /* libPods-MoneyExchangeTests.a */; };
 		F65D0B851F508710006DA3AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F65D0B841F508710006DA3AF /* main.m */; };
 		F65D0B881F508710006DA3AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F65D0B871F508710006DA3AF /* AppDelegate.m */; };
@@ -46,6 +49,11 @@
 /* Begin PBXFileReference section */
 		2BFE119330FF3493F8DBA049 /* Pods-MoneyExchangeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoneyExchangeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MoneyExchangeTests/Pods-MoneyExchangeTests.release.xcconfig"; sourceTree = "<group>"; };
 		6F0DA341650C7CAD6AE654BB /* Pods-MoneyExchangeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoneyExchangeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MoneyExchangeTests/Pods-MoneyExchangeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		766D14501F6450B800AA10E8 /* MECurrencyRatesLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MECurrencyRatesLoaderTests.m; sourceTree = "<group>"; };
+		766D14531F64518700AA10E8 /* NSLayoutConstraint+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLayoutConstraint+Helpers.h"; path = "Categories/NSLayoutConstraint+Helpers.h"; sourceTree = "<group>"; };
+		766D14541F64518700AA10E8 /* NSLayoutConstraint+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLayoutConstraint+Helpers.m"; path = "Categories/NSLayoutConstraint+Helpers.m"; sourceTree = "<group>"; };
+		766D14561F64818B00AA10E8 /* MECurrencyDisplayItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MECurrencyDisplayItem.h; path = MoneyExchange/Models/MECurrencyDisplayItem.h; sourceTree = "<group>"; };
+		766D14571F64818B00AA10E8 /* MECurrencyDisplayItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MECurrencyDisplayItem.m; path = MoneyExchange/Models/MECurrencyDisplayItem.m; sourceTree = "<group>"; };
 		B98AD749A8BBE6E3FD3D55A9 /* Pods-MoneyExchange.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoneyExchange.release.xcconfig"; path = "Pods/Target Support Files/Pods-MoneyExchange/Pods-MoneyExchange.release.xcconfig"; sourceTree = "<group>"; };
 		DD357DCFAF6CCB57C0E4B208 /* libPods-MoneyExchangeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MoneyExchangeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE6C3870D95716457D286706 /* libPods-MoneyExchange.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MoneyExchange.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +129,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		766D14521F64512F00AA10E8 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				766D14531F64518700AA10E8 /* NSLayoutConstraint+Helpers.h */,
+				766D14541F64518700AA10E8 /* NSLayoutConstraint+Helpers.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		771D682C9DD2F27E0A57559C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +172,7 @@
 		F65D0B821F508710006DA3AF /* MoneyExchange */ = {
 			isa = PBXGroup;
 			children = (
+				766D14521F64512F00AA10E8 /* Categories */,
 				F65D0BAD1F50878F006DA3AF /* Resources */,
 				F65D0BAC1F508764006DA3AF /* Controllers */,
 				F65D0BAB1F50875F006DA3AF /* Views */,
@@ -182,6 +200,7 @@
 				F65D0BC21F50C751006DA3AF /* MEExchangerTests.m */,
 				F65D0BC91F50C7D2006DA3AF /* MEAccountTests.m */,
 				F65D0BCB1F50C7F3006DA3AF /* MECurrencyRatesXMLParserTests.m */,
+				766D14501F6450B800AA10E8 /* MECurrencyRatesLoaderTests.m */,
 			);
 			path = MoneyExchangeTests;
 			sourceTree = "<group>";
@@ -191,6 +210,8 @@
 			children = (
 				F65D0BAA1F508738006DA3AF /* Entities */,
 				F65D0BA91F508731006DA3AF /* Services */,
+				766D14561F64818B00AA10E8 /* MECurrencyDisplayItem.h */,
+				766D14571F64818B00AA10E8 /* MECurrencyDisplayItem.m */,
 			);
 			name = Models;
 			path = ..;
@@ -426,13 +447,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MoneyExchange-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C3BDC34504E2ABC9F0E1DA97 /* [CP] Check Pods Manifest.lock */ = {
@@ -441,13 +465,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MoneyExchangeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DD2D47CDBFD19EB2078A4454 /* [CP] Embed Pods Frameworks */ = {
@@ -481,9 +508,11 @@
 				F65D0BC71F50C7A8006DA3AF /* MECurrencyRatesXMLParser.m in Sources */,
 				F65D0B851F508710006DA3AF /* main.m in Sources */,
 				F65D0BB41F509534006DA3AF /* MEExchangeOperation.m in Sources */,
+				766D14551F64518700AA10E8 /* NSLayoutConstraint+Helpers.m in Sources */,
 				F65D0BCF1F526BEE006DA3AF /* MECurrencyAmountView.m in Sources */,
 				F65D0BB01F50936E006DA3AF /* MEExchanger.m in Sources */,
 				F65D0BC01F50C61C006DA3AF /* MEExchangeInput.m in Sources */,
+				766D14581F64818B00AA10E8 /* MECurrencyDisplayItem.m in Sources */,
 				F65D0BD51F554CA9006DA3AF /* MEAccountOperation.m in Sources */,
 				F65D0BD91F554D56006DA3AF /* MEExchangeInteractor.m in Sources */,
 			);
@@ -494,6 +523,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F65D0BC31F50C751006DA3AF /* MEExchangerTests.m in Sources */,
+				766D14511F6450B800AA10E8 /* MECurrencyRatesLoaderTests.m in Sources */,
 				F65D0BCC1F50C7F3006DA3AF /* MECurrencyRatesXMLParserTests.m in Sources */,
 				F65D0BCA1F50C7D2006DA3AF /* MEAccountTests.m in Sources */,
 			);

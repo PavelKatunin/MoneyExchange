@@ -1,12 +1,9 @@
-//
-//  CurrencyAmountView.m
-//  MoneyExchange
-//
-//  Created by Pavel Katunin on 8/26/17.
-//  Copyright © 2017 Pavel Katunin. All rights reserved.
-//
-
 #import "MECurrencyAmountView.h"
+
+static NSDictionary *AttributesForNormalText() {
+    return @{NSForegroundColorAttributeName : [UIColor whiteColor],
+             NSFontAttributeName : [UIFont systemFontOfSize:40.f]};
+}
 
 @interface MECurrencyAmountView ()
 
@@ -25,7 +22,8 @@
     self = [super initWithFrame:frame];
     
     if (self) {
-        
+        [self createSubviews];
+        [self addConstraints:[self createConstraintsForSubviews]];
     }
     
     return self;
@@ -33,14 +31,23 @@
 
 #pragma mark - Private methods
 
+- (BOOL)becomeFirstResponder {
+    return [self.amountTextField becomeFirstResponder];
+}
+
 - (void)createSubviews {
     UILabel *currencyLabel = [[UILabel alloc] init];
     currencyLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:currencyLabel];
     self.currencyLabel = currencyLabel;
+    [currencyLabel setContentHuggingPriority:UILayoutPriorityRequired
+                                     forAxis:UILayoutConstraintAxisHorizontal];
     
     UITextField *amountTextField = [[UITextField alloc] init];
     amountTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    amountTextField.textAlignment = NSTextAlignmentRight;
+    amountTextField.keyboardType = UIKeyboardTypeNumberPad;
+
     [self addSubview:amountTextField];
     self.amountTextField = amountTextField;
     
@@ -52,7 +59,7 @@
     UILabel *rateLabel = [[UILabel alloc] init];
     rateLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:rateLabel];
-    self.accountLabel = rateLabel;
+    self.rateLabel = rateLabel;
 }
 
 - (NSArray *)createConstraintsForSubviews {
@@ -61,7 +68,7 @@
     NSDictionary *topViewsBindings = NSDictionaryOfVariableBindings(_currencyLabel, _amountTextField);
     
     NSArray *horizontalConstraints =
-        [NSLayoutConstraint constraintsWithVisualFormat:@"|-(20)-[_currencyLabel]-(>0)-[_amountTextField]-(20)-|"
+        [NSLayoutConstraint constraintsWithVisualFormat:@"|-(20)-[_currencyLabel]-(0)-[_amountTextField]-(20)-|"
                                                 options:0
                                                 metrics:nil
                                                   views:topViewsBindings];
@@ -77,14 +84,6 @@
                                       constant:0];
     
     [constraints addObject:topYConstraint];
-    
-    NSArray *topOffsetConstraints =
-        [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(20)-[_currencyLabel]"
-                                                options:0
-                                                metrics:nil
-                                                  views:topViewsBindings];
-    
-    [constraints addObjectsFromArray:topOffsetConstraints];
     
     NSLayoutConstraint *accountLeadingSpace =
         [NSLayoutConstraint constraintWithItem:_currencyLabel
@@ -109,12 +108,24 @@
     [constraints addObject:ratesTrailingSpace];
     
     NSArray *ratesTopOffsetConstraints =
-        [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_currencyLabel]-(10)-[_rateLabel]"
+        [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(20)-[_currencyLabel]-(>=10)-[_rateLabel]-(40)-|"
                                                 options:0
                                                 metrics:nil
                                                   views:NSDictionaryOfVariableBindings(_rateLabel, _currencyLabel)];
     
     [constraints addObjectsFromArray:ratesTopOffsetConstraints];
+    
+    NSLayoutConstraint *bottomYConstraint =
+        [NSLayoutConstraint constraintWithItem:_rateLabel
+                                     attribute:NSLayoutAttributeCenterY
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:_accountLabel
+                                     attribute:NSLayoutAttributeCenterY
+                                    multiplier:1
+                                      constant:0];
+    
+    [constraints addObject:bottomYConstraint];
+
     
     return constraints;
 }
