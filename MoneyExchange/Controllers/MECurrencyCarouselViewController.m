@@ -5,7 +5,7 @@
 
 static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 
-@interface MECurrencyCarouselViewController () <iCarouselDataSource, iCarouselDelegate>
+@interface MECurrencyCarouselViewController () <iCarouselDataSource, iCarouselDelegate, MECurrencyAmountViewDelegate>
 
 @property(nonatomic, weak) iCarousel *carouselView;
 @property(nonatomic, strong) NSMutableArray<MECurrencyDisplayItem *> *items;
@@ -15,6 +15,12 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 
 @implementation MECurrencyCarouselViewController
 
+#pragma mark - Properties
+
+- (NSString *)currenyCurrency {
+    return ((MECurrencyAmountView *)self.carouselView.currentItemView).currencyLabel.text;
+}
+
 #pragma mark - Initialization
 
 - (instancetype)initWithItems:(NSArray<MECurrencyDisplayItem *> *)items {
@@ -23,7 +29,6 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
     if (self) {
         self.items = [items mutableCopy];
         self.itemViews = [[NSMutableArray alloc] init];
-        [self setupInitialViews];
     }
     
     return self;
@@ -68,6 +73,7 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
         resultView = [self currencyAmountViewFromItem:self.items[index]];
     }
     
+    resultView.delegate = self;
     [resultView becomeFirstResponder];
     return resultView;
 }
@@ -79,23 +85,22 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 }
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index {
-    [self.itemViews[index] becomeFirstResponder];
+    [carousel.currentItemView becomeFirstResponder];
 }
 
 - (void)carouselDidScroll:(iCarousel *)carousel {
     [carousel.currentItemView becomeFirstResponder];
 }
 
-#pragma mark - Private methods
+#pragma mark - MECurrencyAmountViewDelegate
 
-- (void)setupInitialViews {
-    [self.items enumerateObjectsUsingBlock:^(MECurrencyDisplayItem * _Nonnull obj,
-                                             NSUInteger idx,
-                                             BOOL * _Nonnull stop) {
-        MECurrencyAmountView *view = [self currencyAmountViewFromItem:obj];
-        [self.itemViews addObject:view];
-    }];
+- (void)currencyAmountView:(MECurrencyAmountView *)view didChangeAmountValue:(double)amount {
+    [self.delegate carouselViewController:self
+                          didChangeAmount:amount
+                              forCurrency:view.currencyLabel.text];
 }
+
+#pragma mark - Private methods
 
 - (MECurrencyAmountView *)currencyAmountViewFromItem:(MECurrencyDisplayItem *)item {
     MECurrencyAmountView *view = [[MECurrencyAmountView alloc] initWithFrame:CGRectMake(0,

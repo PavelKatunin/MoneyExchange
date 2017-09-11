@@ -50,6 +50,29 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - MECurrencyCarouselViewControllerDelegate
+
+- (void)carouselViewController:(MECurrencyCarouselViewController *)controller
+               didChangeAmount:(double)amount
+                   forCurrency:(NSString *)currency {
+    if (controller == self.fromCurrencyCarousel) {
+        
+        MEExchangeInput *exchangeInput = [[MEExchangeInput alloc] init];
+        exchangeInput.currencyFrom = currency;
+        exchangeInput.amountFrom = @(amount);
+        exchangeInput.currencyTo = [self.toCurrencyCarousel currenyCurrency];
+        [self.exchangeInteractor exchange:exchangeInput];
+        
+    }
+    else if (controller == self.toCurrencyCarousel) {
+        MEExchangeInput *exchangeInput = [[MEExchangeInput alloc] init];
+        exchangeInput.currencyTo = currency;
+        exchangeInput.amountTo = @(amount);
+        exchangeInput.currencyFrom = [self.fromCurrencyCarousel currenyCurrency];
+        [self.exchangeInteractor exchange:exchangeInput];
+    }
+}
+
 #pragma mark - Private methods
 
 - (void)registerForKeyboardNotifications
@@ -84,6 +107,7 @@
     currencyCarousel.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self.carouselsContainer addSubview:currencyCarousel.view];
     [currencyCarousel didMoveToParentViewController:self];
+    currencyCarousel.delegate = self;
     
     return currencyCarousel;
 }
@@ -101,7 +125,10 @@
     self.carouselsContainer = carouselsContainer;
     
     self.fromCurrencyCarousel = [self setupCarouselViewController];
+    self.fromCurrencyCarousel.view.accessibilityIdentifier = @"FromCurrencyCarousel";
+    
     self.toCurrencyCarousel = [self setupCarouselViewController];
+    self.toCurrencyCarousel.view.accessibilityIdentifier = @"ToCurrencyCarousel";
 }
 
 - (NSArray *)createConstraints {
@@ -114,7 +141,7 @@
     [resultConstraints addObjectsFromArray:[NSLayoutConstraint horizontalConstraintsForWrappedSubview:self.carouselsContainer
                                                                                            withInsets:UIEdgeInsetsZero]];
     
-    UILayoutGuide * topLayout = self.topLayoutGuide;
+    id <UILayoutSupport> topLayout = self.topLayoutGuide;
     [resultConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayout]-[_carouselsContainer]"
                                                                                      views:NSDictionaryOfVariableBindings(_carouselsContainer, topLayout)]];
     
@@ -124,7 +151,7 @@
                                                                                     toItem:self.bottomLayoutGuide
                                                                                  attribute:NSLayoutAttributeTop
                                                                                 multiplier:1.0
-                                                                                  constant:0];
+                                                                                  constant:-240];
     
     self.bottomContainerConstraint = bottomContainerConstraint;
     

@@ -5,7 +5,7 @@ static NSDictionary *AttributesForNormalText() {
              NSFontAttributeName : [UIFont systemFontOfSize:40.f]};
 }
 
-@interface MECurrencyAmountView ()
+@interface MECurrencyAmountView () <UITextFieldDelegate>
 
 @property(nonatomic, weak) UILabel *currencyLabel;
 @property(nonatomic, weak) UITextField *amountTextField;
@@ -29,6 +29,17 @@ static NSDictionary *AttributesForNormalText() {
     return self;
 }
 
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField
+shouldChangeCharactersInRange:(NSRange)range
+replacementString:(NSString *)string {
+    
+    [self.delegate currencyAmountView:self
+                 didChangeAmountValue:[textField.text doubleValue]];
+    return YES;
+}
+
 #pragma mark - Private methods
 
 - (BOOL)becomeFirstResponder {
@@ -47,6 +58,7 @@ static NSDictionary *AttributesForNormalText() {
     amountTextField.translatesAutoresizingMaskIntoConstraints = NO;
     amountTextField.textAlignment = NSTextAlignmentRight;
     amountTextField.keyboardType = UIKeyboardTypeNumberPad;
+    amountTextField.delegate = self;
 
     [self addSubview:amountTextField];
     self.amountTextField = amountTextField;
