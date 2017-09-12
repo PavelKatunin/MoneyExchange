@@ -345,6 +345,7 @@
 				TargetAttributes = {
 					F65D0B7F1F508710006DA3AF = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = T3QJ28VXP6;
 						ProvisioningStyle = Automatic;
 					};
 					F65D0B981F508710006DA3AF = {
@@ -656,6 +657,7 @@
 			baseConfigurationReference = F47BA9B6421B73A7A291B798 /* Pods-MoneyExchange.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3QJ28VXP6;
 				INFOPLIST_FILE = MoneyExchange/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PavelKatunin.MoneyExchange;
@@ -668,6 +670,7 @@
 			baseConfigurationReference = B98AD749A8BBE6E3FD3D55A9 /* Pods-MoneyExchange.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3QJ28VXP6;
 				INFOPLIST_FILE = MoneyExchange/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PavelKatunin.MoneyExchange;

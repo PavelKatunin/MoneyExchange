@@ -5,7 +5,7 @@
 #import "MECurrencyAmountView.h"
 #import "MEFloatingBackgroundView.h"
 
-@interface MEExchangeViewController ()
+@interface MEExchangeViewController () <MECurrencyCarouselViewControllerDelegate>
 
 @property(strong) MEExchangeInteractor *exchangeInteractor;
 
@@ -39,10 +39,19 @@
     [super viewDidLoad];
     [self createSubviews];
     [self.view addConstraints:[self createConstraints]];
+
+    UIBarButtonItem *exchangeItem = [[UIBarButtonItem alloc] initWithTitle:@"Exchange"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(exchangeCurrentItems:)];
+    
+    // set the nav bar's right button item
+    self.navigationItem.rightBarButtonItem = exchangeItem;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self.fromCurrencyCarousel becomeFirstResponder];
     [self registerForKeyboardNotifications];
 }
 
@@ -50,30 +59,40 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait) ;
+}
+
 #pragma mark - MECurrencyCarouselViewControllerDelegate
 
 - (void)carouselViewController:(MECurrencyCarouselViewController *)controller
                didChangeAmount:(double)amount
                    forCurrency:(NSString *)currency {
+    MEExchangeInput *exchangeInput = [[MEExchangeInput alloc] init];
+    
+    exchangeInput.currencyFrom = [self.fromCurrencyCarousel currentCurrency];
+    exchangeInput.currencyTo = [self.toCurrencyCarousel currentCurrency];
+    
     if (controller == self.fromCurrencyCarousel) {
-        
-        MEExchangeInput *exchangeInput = [[MEExchangeInput alloc] init];
-        exchangeInput.currencyFrom = currency;
         exchangeInput.amountFrom = @(amount);
-        exchangeInput.currencyTo = [self.toCurrencyCarousel currenyCurrency];
-        [self.exchangeInteractor exchange:exchangeInput];
-        
     }
     else if (controller == self.toCurrencyCarousel) {
-        MEExchangeInput *exchangeInput = [[MEExchangeInput alloc] init];
-        exchangeInput.currencyTo = currency;
         exchangeInput.amountTo = @(amount);
-        exchangeInput.currencyFrom = [self.fromCurrencyCarousel currenyCurrency];
-        [self.exchangeInteractor exchange:exchangeInput];
     }
+    
+    MEExchangeOperation *previewOperation = [self.exchangeInteractor previewExchange:exchangeInput];
+    
+    [self.toCurrencyCarousel setAmount:previewOperation.fromAcountOperation.amount
+                           forCurrency:previewOperation.fromAcountOperation.currency];
+    [self.fromCurrencyCarousel setAmount:previewOperation.toAcountOperation.amount
+                             forCurrency:previewOperation.toAcountOperation.currency];
 }
 
 #pragma mark - Private methods
+
+- (void)exchangeCurrentItems:(id)sender {
+    
+}
 
 - (void)registerForKeyboardNotifications
 {
@@ -151,7 +170,7 @@
                                                                                     toItem:self.bottomLayoutGuide
                                                                                  attribute:NSLayoutAttributeTop
                                                                                 multiplier:1.0
-                                                                                  constant:-240];
+                                                                                  constant:-244];
     
     self.bottomContainerConstraint = bottomContainerConstraint;
     

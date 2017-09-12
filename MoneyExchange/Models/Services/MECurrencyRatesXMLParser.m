@@ -14,10 +14,18 @@
         NSDictionary *currencyRate = (NSDictionary *)obj;
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-        formatter.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *number = [formatter numberFromString:currencyRate[@"_rate"]];
+        formatter.numberStyle = NSNumberFormatterCurrencyStyle;
         
-        resultDict[currencyRate[@"_currency"]] = number;
+        NSString *numberString = currencyRate[@"_rate"];
+        
+        NSNumber *number = [formatter numberFromString:numberString];
+        
+        if (!number) {
+            number = @([numberString doubleValue]);
+        }
+        
+        NSString *currentCurrency = currencyRate[@"_currency"];
+        resultDict[currentCurrency] = number;
     }];
     
     // TODO: choose place for edding eur rate

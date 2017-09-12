@@ -1,6 +1,8 @@
 #import "MECurrencyAmountView.h"
 
-static NSDictionary *AttributesForNormalText() {
+static const NSInteger kMaxAmountLength = 10;
+
+static NSDictionary *AttributesForAmountField() {
     return @{NSForegroundColorAttributeName : [UIColor whiteColor],
              NSFontAttributeName : [UIFont systemFontOfSize:40.f]};
 }
@@ -15,6 +17,28 @@ static NSDictionary *AttributesForNormalText() {
 @end
 
 @implementation MECurrencyAmountView
+
+#pragma mark - Properties
+
+- (void)setDisplayItem:(MECurrencyDisplayItem *)displayItem {
+    _displayItem = displayItem;
+    if (displayItem.currency) {
+        self.currencyLabel.attributedText = [[NSAttributedString alloc] initWithString:displayItem.currency
+                                                                            attributes:AttributesForAmountField()];
+    }
+
+    self.amountTextField.text = displayItem.amount;
+
+    if (displayItem.account) {
+        self.accountLabel.attributedText = [[NSAttributedString alloc] initWithString:displayItem.account
+                                                                           attributes:AttributesForAmountField()];
+    }
+    
+    if (displayItem.rate) {
+        self.rateLabel.attributedText = [[NSAttributedString alloc] initWithString:displayItem.rate
+                                                                        attributes:AttributesForAmountField()];
+    }
+}
 
 #pragma mark - Initialization
 
@@ -35,9 +59,13 @@ static NSDictionary *AttributesForNormalText() {
 shouldChangeCharactersInRange:(NSRange)range
 replacementString:(NSString *)string {
     
+    NSMutableString *newAmountString = [textField.text mutableCopy];
+    [newAmountString replaceCharactersInRange:range withString:string];
+    
     [self.delegate currencyAmountView:self
-                 didChangeAmountValue:[textField.text doubleValue]];
-    return YES;
+                 didChangeAmountValue:[newAmountString doubleValue]];
+    
+    return textField.text.length + string.length < kMaxAmountLength;
 }
 
 #pragma mark - Private methods
@@ -56,9 +84,10 @@ replacementString:(NSString *)string {
     
     UITextField *amountTextField = [[UITextField alloc] init];
     amountTextField.translatesAutoresizingMaskIntoConstraints = NO;
-    amountTextField.textAlignment = NSTextAlignmentRight;
     amountTextField.keyboardType = UIKeyboardTypeNumberPad;
     amountTextField.delegate = self;
+    amountTextField.defaultTextAttributes = AttributesForAmountField();
+    amountTextField.textAlignment = NSTextAlignmentRight;
 
     [self addSubview:amountTextField];
     self.amountTextField = amountTextField;

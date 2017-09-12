@@ -6,19 +6,14 @@
 #import <UIKit/UIKit.h>
 
 static NSString *const kEuropeanCentralBankRatesUrl =
-    @"https://http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+    @"https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
 
 static NSArray *CurrencyCodesForDisplay() {
-    return @[@"usd", @"eur", @"gbp"];
+    return @[@"USD", @"EUR", @"GBP"];
 }
 
 static NSDictionary *AttributesForNormalText() {
     return @{NSForegroundColorAttributeName : [UIColor whiteColor],
-             NSFontAttributeName : [UIFont systemFontOfSize:40.f]};
-}
-
-static NSDictionary *AttributesForErrorText() {
-    return @{NSForegroundColorAttributeName : [UIColor redColor],
              NSFontAttributeName : [UIFont systemFontOfSize:40.f]};
 }
 
@@ -41,10 +36,9 @@ static NSDictionary *AttributesForErrorText() {
     [CurrencyCodesForDisplay() enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *currency = (NSString *)obj;
         MECurrencyDisplayItem *item = [[MECurrencyDisplayItem alloc] init];
-        item.currency = [[NSAttributedString alloc] initWithString:currency attributes:AttributesForNormalText()];
+        item.currency = currency;
         NSString *account = [NSString stringWithFormat:@"%.0f", [self.account accountForCurrency:currency]];
-        item.account = [[NSAttributedString alloc] initWithString:account
-                                                       attributes:AttributesForNormalText()];
+        item.account = account;
         [items addObject:item];
     }];
     
@@ -63,6 +57,8 @@ static NSDictionary *AttributesForErrorText() {
                                                                      parser:ratesParser];
         
         self.account = [[MEAccount alloc] init];
+        
+        [self updateRates];
     }
     return self;
 }
@@ -76,6 +72,22 @@ static NSDictionary *AttributesForErrorText() {
 
 - (BOOL)canExchange:(MEExchangeInput *)exchangeInput {
     return NO;
+}
+
+- (MEExchangeOperation *)previewExchange:(MEExchangeInput *)exchangeInput {
+    return [self.exchanger exchange:exchangeInput];
+}
+
+#pragma mark - Private methods
+
+- (void)updateRates {
+    [self.ratesLoader loadRatesSuccess:^(NSDictionary *rates) {
+        [self.exchanger updateRatesMap:rates];
+    }
+                                  fail:^(NSError *error) {
+                                      // TODO: handle
+                                  }
+                           targetQueue:dispatch_get_main_queue()];
 }
 
 @end

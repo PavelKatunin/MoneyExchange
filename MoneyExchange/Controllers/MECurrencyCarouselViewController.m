@@ -11,13 +11,15 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 @property(nonatomic, strong) NSMutableArray<MECurrencyDisplayItem *> *items;
 @property(nonatomic, strong) NSMutableArray<MECurrencyAmountView *> *itemViews;
 
+@property(nonatomic, weak) UIPageControl *pageControl;
+
 @end
 
 @implementation MECurrencyCarouselViewController
 
 #pragma mark - Properties
 
-- (NSString *)currenyCurrency {
+- (NSString *)currentCurrency {
     return ((MECurrencyAmountView *)self.carouselView.currentItemView).currencyLabel.text;
 }
 
@@ -37,7 +39,17 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 #pragma mark - Public methods
 
 - (void)setItem:(MECurrencyDisplayItem *)item forIndex:(int)index {
-    // TODO: implement
+    self.items[index] = item;
+    [self.carouselView reloadItemAtIndex:index animated:NO];
+}
+
+- (void)setAmount:(double)amount forCurrency:(NSString *)currency {
+    [self.items enumerateObjectsUsingBlock:^(MECurrencyDisplayItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([item.currency.lowercaseString isEqualToString:currency.lowercaseString]) {
+            item.amount = [NSString stringWithFormat:@"%.f", amount];
+            [self.carouselView reloadItemAtIndex:idx animated:NO];
+        }
+    }];
 }
 
 #pragma mark - View life cycle
@@ -50,7 +62,15 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
     self.carouselView = carousel;
     [self.view addSubview:carousel];
     
+    UIPageControl *pageControl = [self createPageControl];
+    [self.view addSubview:pageControl];
+    self.pageControl = pageControl;
+    
     [self.view addConstraints:[self createConstraints]];
+}
+
+- (BOOL)becomeFirstResponder {
+    return [self.carouselView.currentItemView becomeFirstResponder];
 }
 
 #pragma mark - iCarouselDataSource
@@ -66,8 +86,9 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
     MECurrencyAmountView *resultView = nil;
     
     if (view) {
-        [self setItem:self.items[index] toCurrencyView:view];
-        resultView = view;
+        MECurrencyAmountView *curerncyView = (MECurrencyAmountView *)view;
+        curerncyView.displayItem = self.items[index];
+        resultView = curerncyView;
     }
     else {
         resultView = [self currencyAmountViewFromItem:self.items[index]];
@@ -90,6 +111,7 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
 
 - (void)carouselDidScroll:(iCarousel *)carousel {
     [carousel.currentItemView becomeFirstResponder];
+    self.pageControl.currentPage = carousel.currentItemIndex;
 }
 
 #pragma mark - MECurrencyAmountViewDelegate
@@ -107,15 +129,9 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
                                                                                         0,
                                                                                         self.view.frame.size.width,
                                                                                         self.view.frame.size.height)];
-    [self setItem:item toCurrencyView:view];
+    
+    view.displayItem = item;
     return view;
-}
-
-- (void)setItem:(MECurrencyDisplayItem *)item toCurrencyView:(MECurrencyAmountView *)currencyView {
-    currencyView.currencyLabel.attributedText = item.currency;
-    currencyView.amountTextField.attributedText = item.amount;
-    currencyView.accountLabel.attributedText = item.account;
-    currencyView.rateLabel.attributedText = item.rate;
 }
 
 - (iCarousel *)createCarouselView {
@@ -127,9 +143,26 @@ static NSString *const kCurrencyAmounntCellId = @"CurrencyAmounntCellId";
     return carousel;
 }
 
+- (UIPageControl *)createPageControl {
+    UIPageControl *pageControl = [[UIPageControl alloc] init];
+    pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+    pageControl.numberOfPages = [self.items count];
+    return pageControl;
+}
+
 - (NSArray *)createConstraints {
-    return [NSLayoutConstraint constraintsForWrappedSubview:self.carouselView
-                                                 withInsets:UIEdgeInsetsZero];
+    NSMutableArray *resultConstraints = [[NSMutableArray alloc] init];
+    
+    [resultConstraints addObjectsFromArray:[NSLayoutConstraint constraintsForWrappedSubview:self.carouselView
+                                                                                 withInsets:UIEdgeInsetsZero]];
+    
+    [resultConstraints addObjectsFromArray:[NSLayoutConstraint horizontalConstraintsForWrappedSubview:self.pageControl
+                                                                                           withInsets:UIEdgeInsetsZero]];
+    
+    [resultConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pageControl]-|"
+                                                                                     views:NSDictionaryOfVariableBindings(_pageControl)]];
+    
+    return resultConstraints;
 }
 
 @end

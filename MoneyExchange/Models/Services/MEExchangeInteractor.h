@@ -14,10 +14,6 @@ typedef enum : NSUInteger {
 
 - (void)exchangeInteractorPrepared:(MEExchangeInteractor *)exchangeInteractor;
 
-- (void)echangeInteractDidChangeItem:(MECurrencyDisplayItem *)item
-                             atIndex:(NSInteger)index
-                         accountType:(ExchangeAccountType)accountType;
-
 @end
 
 @interface MEExchangeInteractor : NSObject
@@ -26,6 +22,7 @@ typedef enum : NSUInteger {
 
 - (BOOL)exchange:(MEExchangeInput *)exchangeInput;
 - (BOOL)canExchange:(MEExchangeInput *)exchangeInput;
+- (MEExchangeOperation *)previewExchange:(MEExchangeInput *)exchangeInput;
 
 @property(nonatomic, readonly) NSArray<MECurrencyDisplayItem *> *initialDisplayItems;
 

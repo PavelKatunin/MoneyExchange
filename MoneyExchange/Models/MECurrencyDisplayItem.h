@@ -2,9 +2,9 @@
 
 @interface MECurrencyDisplayItem : NSObject
 
-@property(nonatomic, copy) NSAttributedString *currency;
-@property(nonatomic, copy) NSAttributedString *amount;
-@property(nonatomic, copy) NSAttributedString *account;
-@property(nonatomic, copy) NSAttributedString *rate;
+@property(nonatomic, copy) NSString *currency;
+@property(nonatomic, copy) NSString *amount;
+@property(nonatomic, copy) NSString *account;
+@property(nonatomic, copy) NSString *rate;
 
 @end

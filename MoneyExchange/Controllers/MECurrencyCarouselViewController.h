@@ -15,10 +15,12 @@
 
 @property(nonatomic, weak) id <MECurrencyCarouselViewControllerDelegate> delegate;
 
-@property(nonatomic, readonly) NSString *currenyCurrency;
+@property(nonatomic, readonly) NSString *currentCurrency;
 
 - (instancetype)initWithItems:(NSArray<MECurrencyDisplayItem *> *)items;
 
 - (void)setItem:(MECurrencyDisplayItem *)item forIndex:(int)index;
+
+- (void)setAmount:(double)amount forCurrency:(NSString *)currency;
 
 @end
